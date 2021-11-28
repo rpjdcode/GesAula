@@ -74,12 +74,13 @@ public class GrupoController implements Initializable{
 		examenesProgressLabel.textProperty().bind(examenesSlider.valueProperty().asString("%.2f").concat(" %"));
 		practicasProgressLabel.textProperty().bind(practicasSlider.valueProperty().asString("%.2f").concat(" %"));
 		
-		Bindings.bindBidirectional(denominacionText.textProperty(), model.getGrupoActual().denominacionProperty());
-		Bindings.bindBidirectional(inicioCursoDP.valueProperty(), model.getGrupoActual().iniCursoProperty());
-		Bindings.bindBidirectional(finCursoDP.valueProperty(), model.getGrupoActual().finCursoProperty());
-		Bindings.bindBidirectional(examenesSlider.valueProperty(), model.getGrupoActual().getPesos().examenesProperty());
-		Bindings.bindBidirectional(actitudSlider.valueProperty(), model.getGrupoActual().getPesos().actitudProperty());
-		Bindings.bindBidirectional(practicasSlider.valueProperty(), model.getGrupoActual().getPesos().practicasProperty());
+		bindAll();
+		
+		model.grupoActualProperty().addListener((o, ov, nv) -> {
+			unbindAll();
+			System.out.println("GrupoController: Cambio en grupo actual. Antes " + ov + " ahora " + nv);
+			bindAll();
+		});
 		
 		
 	}
@@ -108,6 +109,24 @@ public class GrupoController implements Initializable{
 	}
 
 
+    private void unbindAll() {
+    	denominacionText.textProperty().unbindBidirectional(model.getGrupoActual().denominacionProperty());
+    	inicioCursoDP.valueProperty().unbindBidirectional(model.getGrupoActual().iniCursoProperty());
+    	finCursoDP.valueProperty().unbindBidirectional(model.getGrupoActual().finCursoProperty());
+    	examenesSlider.valueProperty().unbindBidirectional(model.getGrupoActual().getPesos().examenesProperty());
+    	actitudSlider.valueProperty().unbindBidirectional(model.getGrupoActual().getPesos().actitudProperty());
+    	practicasSlider.valueProperty().unbindBidirectional(model.getGrupoActual().getPesos().practicasProperty());
+
+    }
+    
+    private void bindAll() {
+		Bindings.bindBidirectional(denominacionText.textProperty(), model.getGrupoActual().denominacionProperty());
+		Bindings.bindBidirectional(inicioCursoDP.valueProperty(), model.getGrupoActual().iniCursoProperty());
+		Bindings.bindBidirectional(finCursoDP.valueProperty(), model.getGrupoActual().finCursoProperty());
+		Bindings.bindBidirectional(examenesSlider.valueProperty(), model.getGrupoActual().getPesos().examenesProperty());
+		Bindings.bindBidirectional(actitudSlider.valueProperty(), model.getGrupoActual().getPesos().actitudProperty());
+		Bindings.bindBidirectional(practicasSlider.valueProperty(), model.getGrupoActual().getPesos().practicasProperty());
+    }
 
 }
 

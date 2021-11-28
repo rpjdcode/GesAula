@@ -14,14 +14,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+
 
 public class RootController implements Initializable {
 	
@@ -52,6 +55,9 @@ public class RootController implements Initializable {
 
     @FXML
     private Button toolSaveFileButton;
+    
+    @FXML
+    private Button openButton;
 
     @FXML
     private BorderPane view;
@@ -81,13 +87,15 @@ public class RootController implements Initializable {
 				view.setCenter(grupoController.getView());
 			}
 			
-		});
+		});		
 		
 	}
 	
     @FXML
     void onNewButtonAction(ActionEvent event) {
     	model.setGrupo(new Grupo());
+    	model.alumnosProperty().clear();
+    	
     }
 
     @FXML
@@ -105,8 +113,41 @@ public class RootController implements Initializable {
 			e.printStackTrace();
 		}
     }
+    
+    @FXML
+    void onOpenAction() {
+    	FileChooser chooser = new FileChooser();
+    	Stage chooserStage = new Stage();
+		chooser.setTitle("Abrir Fichero");
+		chooser.getExtensionFilters().addAll(new ExtensionFilter("XML", "*.xml*"));
+		
+		// Indicamos que almacenaremos el archivo descargado en el indicado en el
+		// chooser
+		File initFile = chooser.showOpenDialog(chooserStage);
+		
+		if (initFile != null) {
+			try {
+				model.grupoProperty().unbindBidirectional(grupoController.getModel().grupoActualProperty());
+				model.alumnosProperty().unbindBidirectional(grupoController.getModel().getGrupoActual().alumnosProperty());
+				model.setGrupo(Grupo.read(initFile));
+				System.out.println("Grupo cargado: " + Grupo.read(initFile).getDenominacion());
+				grupoController.getModel().setGrupoActual(model.getGrupo());
+				Bindings.bindBidirectional(model.grupoProperty(), grupoController.getModel().grupoActualProperty());
+				Bindings.bindBidirectional(model.alumnosProperty(), grupoController.getModel().getGrupoActual().alumnosProperty());
+				App.info("Grupo cargado", "Fichero cargado con éxito", "Se ha cargado el fichero: " + initFile.getAbsolutePath());
+				toolFileNameText.setText(initFile.getAbsolutePath());
+			} catch (Exception e) {
+				App.error("Error", "Error carga de grupo", "Se produjo un error en la carga de grupo mediante fichero. Detalles: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+    }
 
     public BorderPane getView() {
 		return view;
 	}
+    
+    private void limpiarApp() {
+    	
+    }
 }

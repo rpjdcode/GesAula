@@ -1,7 +1,6 @@
 package dad.rubenpablo.alumno;
 
 import dad.gesaula.ui.model.Alumno;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -12,10 +11,10 @@ import javafx.collections.ObservableList;
 
 public class AlumnoModel {
 	
-	private ObjectProperty<Alumno> alumnoSeleccionado = new SimpleObjectProperty<Alumno>();
+	private ObjectProperty<Alumno> alumnoSeleccionado = new SimpleObjectProperty<Alumno>(new Alumno());
 	private IntegerProperty indiceSeleccionado = new SimpleIntegerProperty(-1);
 	private ListProperty<Alumno> alumnos = new SimpleListProperty<Alumno>();
-	private ObjectProperty<Alumno> alumnoEditar = new SimpleObjectProperty<Alumno>();
+	private ObjectProperty<Alumno> alumnoEditar = new SimpleObjectProperty<Alumno>(null);
 	
 	public final ObjectProperty<Alumno> alumnoSeleccionadoProperty() {
 		return this.alumnoSeleccionado;

@@ -22,6 +22,7 @@
           <Button fx:id="toolNewButton" mnemonicParsing="false" onAction="#onNewButtonAction" text="Nuevo" />
             <TextField fx:id="toolFileNameText" promptText="Nombre del fichero" />
             <Button fx:id="toolSaveFileButton" defaultButton="true" mnemonicParsing="false" onAction="#onSaveFileAction" text="Guardar" />
+            <Button fx:id="openButton" mnemonicParsing="false" onAction="#onOpenAction" text="Abrir" />
         </items>
       </ToolBar>
    </top>
